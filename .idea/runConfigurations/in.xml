@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="in" type="Application" factoryName="Application" nameIsGenerated="true">
+    <output_file path="E:\develop\代码\DSAA\src\in\p46.in.txt" is_save="true" />
+    <option name="MAIN_CLASS_NAME" value="in.in" />
+    <module name="DSAA" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="in.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
