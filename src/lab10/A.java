@@ -132,7 +132,6 @@ public class A {
             heap[i] = heap[j];
             heap[j] = temp;
         }
-
     }
 
     static class QReader {
@@ -206,4 +205,5 @@ public class A {
             }
         }
     }
+
 }
