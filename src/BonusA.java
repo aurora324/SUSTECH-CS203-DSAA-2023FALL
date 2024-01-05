@@ -10,8 +10,6 @@ public class BonusA {
             int n = in.nextInt();
             long k = in.nextLong();
             long[] arr = new long[n + 1];
-//            int []sort=new int[n];
-//            int [] temp=new int[n];
             for (int j = 0; j < arr.length - 1; j++) {
                 arr[j] = in.nextLong();
 //                sort[i]=arr[i];
@@ -40,7 +38,6 @@ public class BonusA {
     public static boolean check(long[] arr, long mid, long k) {
         //compare to k
         long curCounter = 0;
-        int curIndex;
         long curRe = 0;
         for (int i = 0; i < arr.length - 1; i++) {
             curRe += arr[i];
@@ -48,18 +45,16 @@ public class BonusA {
                 while (arr[i] + arr[i + 1] < mid && i < arr.length - 2) {
                     i++;
                 }
-                curRe=arr[i];
+                curRe = arr[i];
             }
-            while (curRe >= mid) {
-                long sumCount=curRe/mid;
+            if (curRe >= mid) {
+                long sumCount = curRe / mid;
                 curRe %= mid;
-                curCounter+=sumCount;
+                curCounter += sumCount;
             }
         }
-
         return curCounter >= k;
     }
-
 
 
     static class QReader {

@@ -4,80 +4,80 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-//16
-public class B {
+public class B1 {
     public static void main(String[] args) {
         QReader in = new QReader();
         QWriter out = new QWriter();
-
         int n = in.nextInt();
+        node[] nodes = new node[n + 1];
+        for (int i = 1; i < nodes.length; i++) {
+            nodes[i] = new node();
+        }
         int m = in.nextInt();
-        Node[] Nodes = new Node[n + 1];
-        Side[] Sides = new Side[m + 1];
-        for (int i = 1; i < Nodes.length; i++) {
-            Nodes[i] = new Node();
-        }
-        Side minSide = new Side();
-        long minLength = Long.MAX_VALUE;
-        for (int i = 1; i < Sides.length; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            long w = in.nextLong();
-            Side side = new Side(Nodes[a], Nodes[b], w);
-            Sides[i] = side;
-            Nodes[a].children.add(Nodes[b]);
-            Nodes[b].children.add(Nodes[a]);
-            Nodes[a].SideList.add(Sides[i]);
-            Nodes[b].SideList.add(Sides[i]);
-            if (Sides[i].value < minLength) {
-                minLength = Sides[i].value;
-                minSide = Sides[i];
+        node a = new node();
+        node b = new node();
+        long result=0;
+        long miniWeight = Long.MAX_VALUE;
+        for (int i = 0; i < m; i++) {
+            int p = in.nextInt();
+            int q = in.nextInt();
+            long w = in.nextInt();
+//            if(w>0)result+=w;
+            nodes[p].children.add(nodes[q]);
+            nodes[q].children.add(nodes[p]);
+            nodes[p].weight.add(w);
+            nodes[q].weight.add(w);
+            if (w < miniWeight) {
+                miniWeight = w;
+                a = nodes[p];
+                b = nodes[q];
             }
         }
-        heap heap = new heap(m + 1);
-        heap.insert(minSide);
-        minSide.state = 1;
 
+        heap heap = new heap(50_0000);
+        for (int i = 0; i < a.children.size(); i++) {
+            heapNode heapNode = new heapNode(a.children.get(i), a.weight.get(i));
+            heap.insert(heapNode);
+            a.children.get(i).state = 1;
+        }
+        for (int i = 0; i < b.children.size(); i++) {
+            heapNode heapNode = new heapNode(b.children.get(i), b.weight.get(i));
+            heap.insert(heapNode);
+            b.children.get(i).state = 1;
+        }
         while (heap.size != 0) {
-            minSide = heap.delete();
-            if (minSide.a.isVisited && minSide.b.isVisited) {
-                continue;
-            }
-            minSide.state = 2;
-            minSide.a.isVisited = true;
-            minSide.b.isVisited = true;
-            for (int i = 0; i < minSide.a.SideList.size(); i++) {
-                if (minSide.a.SideList.get(i).state == 0) {
-                    heap.insert(minSide.a.SideList.get(i));
-                    minSide.a.SideList.get(i).state = 1;
-                }
-            }
+            heapNode heapNode = heap.delete();
+            if (heapNode.node.state == 2) continue;
 
-            for (int i = 0; i < minSide.b.SideList.size(); i++) {
-                if (minSide.b.SideList.get(i).state == 0) {
-                    heap.insert(minSide.b.SideList.get(i));
-                    minSide.b.SideList.get(i).state = 1;
+            heapNode.node.state = 2;
+
+            for (int i = 0; i < heapNode.node.children.size(); i++) {
+                if (heapNode.node.children.get(i).state == 0) {
+                    heapNode.node.children.get(i).state = 1;
+                    heap.insert(new heapNode(heapNode.node.children.get(i), heapNode.node.weight.get(i)));
+                } else if (heapNode.node.children.get(i).state == 1) {
+                    if (heapNode.node.weight.get(i) < heapNode.value) {
+                        heap.insert(new heapNode(heapNode.node.children.get(i), heapNode.node.weight.get(i)));
+                    }
                 }
             }
         }
 
-        long answer = 0;
-        for (int i = 1; i < Sides.length; i++) {
-            if (!(Sides[i].state == 2) && Sides[i].value > 0) answer += Sides[i].value;
-        }
-        out.print(answer);
+
+
         out.close();
     }
 
+
     static class heap {
-        Side[] heap;
+        heapNode[] heap;
         int size = 0;
 
         public heap(int n) {
-            heap = new Side[n + 1];
+            heap = new heapNode[n + 1];
         }
 
-        public void insert(Side x) {
+        public void insert(heapNode x) {
             size++;
             heap[size] = x;
             int top = size;
@@ -94,9 +94,10 @@ public class B {
             }
         }
 
-        public Side delete() {
-            Side re = heap[1];
+        public heapNode delete() {
+            heapNode q = heap[1];
             heap[1] = heap[size];
+            heap[size] = null;
             size--;
             int top = size;
             int t = 1;
@@ -120,44 +121,32 @@ public class B {
                     }
                 }
             }
-            return re;
+            return q;
         }
 
-        public static void swap(Side[] heap, int i, int j) {
-            Side temp = heap[i];
+        public static void swap(heapNode[] heap, int i, int j) {
+            heapNode temp = heap[i];
             heap[i] = heap[j];
             heap[j] = temp;
         }
     }
 
-    static class Node {
-        long value;
-        boolean isVisited;
-        ArrayList<Node> children = new ArrayList<>();
-        ArrayList<Side> SideList = new ArrayList<>();
+    public static class node {
+        ArrayList<node> children = new ArrayList<>();
+        ArrayList<Long> weight = new ArrayList<>();
+        int state;
 
-
-        public Node() {
-        }
-
-        public Node(long value) {
-            this.value = Long.MAX_VALUE;
+        public node() {
         }
     }
 
-    static class Side {
-        long value;
-        Node a;
-        Node b;
-        int state;
+    static class heapNode {
+        node node;
+        long value = Long.MAX_VALUE;
 
-        public Side() {
-        }
-
-        public Side(Node a, Node b, long value) {
+        public heapNode(node node, long value) {
+            this.node = node;
             this.value = value;
-            this.a = a;
-            this.b = b;
         }
     }
 
