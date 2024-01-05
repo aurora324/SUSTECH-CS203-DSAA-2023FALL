@@ -15,14 +15,12 @@ public class B1 {
         }
         int m = in.nextInt();
         node a = new node();
-        node b = new node();
-        long result=0;
+        long result = 0;
         long miniWeight = Long.MAX_VALUE;
         for (int i = 0; i < m; i++) {
             int p = in.nextInt();
             int q = in.nextInt();
             long w = in.nextInt();
-//            if(w>0)result+=w;
             nodes[p].children.add(nodes[q]);
             nodes[q].children.add(nodes[p]);
             nodes[p].weight.add(w);
@@ -30,7 +28,6 @@ public class B1 {
             if (w < miniWeight) {
                 miniWeight = w;
                 a = nodes[p];
-                b = nodes[q];
             }
         }
 
@@ -39,11 +36,7 @@ public class B1 {
             heapNode heapNode = new heapNode(a.children.get(i), a.weight.get(i));
             heap.insert(heapNode);
             a.children.get(i).state = 1;
-        }
-        for (int i = 0; i < b.children.size(); i++) {
-            heapNode heapNode = new heapNode(b.children.get(i), b.weight.get(i));
-            heap.insert(heapNode);
-            b.children.get(i).state = 1;
+            a.children.get(i).value = a.weight.get(i);
         }
         while (heap.size != 0) {
             heapNode heapNode = heap.delete();
@@ -54,6 +47,7 @@ public class B1 {
             for (int i = 0; i < heapNode.node.children.size(); i++) {
                 if (heapNode.node.children.get(i).state == 0) {
                     heapNode.node.children.get(i).state = 1;
+                    heapNode.node.children.get(i).value = heapNode.node.weight.get(i);
                     heap.insert(new heapNode(heapNode.node.children.get(i), heapNode.node.weight.get(i)));
                 } else if (heapNode.node.children.get(i).state == 1) {
                     if (heapNode.node.weight.get(i) < heapNode.value) {
@@ -62,7 +56,10 @@ public class B1 {
                 }
             }
         }
-
+        for (int i = 1; i < nodes.length; i++) {
+            if (nodes[i].state == 2 && nodes[i].value > 0) result += nodes[i].value;
+        }
+        out.print(result);
 
 
         out.close();
@@ -132,6 +129,7 @@ public class B1 {
     }
 
     public static class node {
+        long value = Long.MAX_VALUE;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<Long> weight = new ArrayList<>();
         int state;
