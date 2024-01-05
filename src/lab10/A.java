@@ -10,9 +10,9 @@ public class A {
         QWriter out = new QWriter();
         int n = in.nextInt();
         int m = in.nextInt();
-        Node[] nodes = new Node[n + 1];
+        node[] nodes = new node[n + 1];
         for (int i = 1; i < n + 1; i++) {
-            nodes[i] = new Node();
+            nodes[i] = new node();
         }
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
@@ -23,49 +23,41 @@ public class A {
         }
         heap heap = new heap(n);
         nodes[1].value = 0;
-        heap.insert(new heapNode(nodes[1], nodes[1].value));
-        heapNode min;
+        heap.insert(nodes[1]);
+        node min;
         while (heap.size != 0) {
             min = heap.delete();
-            if (min.node.isVisited) {
+            if (min.isVisited) {
                 continue;
             }
-            min.node.isVisited = true;
-            int child = min.node.children.size();
+            min.isVisited = true;
+            int child = min.children.size();
             for (int i = 0; i < child; i++) {
-                Node temp = min.node.children.get(i);
+                node temp = min.children.get(i);
                 if (!temp.isVisited) {
-                    if (temp.value > min.node.LengthList.get(i) + min.value) {
-                        temp.value = min.node.LengthList.get(i) + min.value;
+                    if (temp.value > min.LengthList.get(i) + min.value) {
+                        temp.value = min.LengthList.get(i) + min.value;
                     }
-                    heap.insert(new heapNode(temp, temp.value));
+                    heap.insert(temp);
                 }
             }
         }
         if (nodes[n].value == Long.MAX_VALUE) {
             System.out.println("-1");
-        } else System.out.println(nodes[n].value);
+        } else {
+            System.out.println(nodes[n].value);
+        }
         out.close();
     }
 
-    static class heapNode {
-        Node node;
-        long value;
-
-        public heapNode(Node node, long value) {
-            this.node = node;
-            this.value = value;
-        }
-    }
-
-    static class Node {
+    static class node {
         long value;
         boolean isVisited = false;
-        ArrayList<Node> children;
+        ArrayList<node> children;
         ArrayList<Long> LengthList;
 
 
-        public Node() {
+        public node() {
             this.value = Long.MAX_VALUE;
             this.children = new ArrayList<>();
             this.LengthList = new ArrayList<>();
@@ -73,14 +65,14 @@ public class A {
     }
 
     static class heap {
-        heapNode[] heap;
+        node[] heap;
         int size = 0;
 
         public heap(int n) {
-            heap = new heapNode[n + 1];
+            heap = new node[n + 1];
         }
 
-        public void insert(heapNode x) {
+        public void insert(node x) {
             size++;
             heap[size] = x;
             int top = size;
@@ -97,8 +89,8 @@ public class A {
             }
         }
 
-        public heapNode delete() {
-            heapNode q = heap[1];
+        public node delete() {
+            node q = heap[1];
             heap[1] = heap[size];
             heap[size] = null;
             size--;
@@ -127,8 +119,8 @@ public class A {
             return q;
         }
 
-        public static void swap(heapNode[] heap, int i, int j) {
-            heapNode temp = heap[i];
+        public static void swap(node[] heap, int i, int j) {
+            node temp = heap[i];
             heap[i] = heap[j];
             heap[j] = temp;
         }

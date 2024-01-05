@@ -36,7 +36,6 @@ public class C {
         }
 
 
-
 //        heap heap = new heap(n);
 //        nodes[1].value = 0;
 //        heap.insert(nodes[1]);
@@ -59,21 +58,21 @@ public class C {
 //            }
 //        }
 
+
         out.close();
     }
 
     static class heap {
         node[] heap;
-        int size = 0;
+        int top = 0;
 
         public heap(int n) {
             heap = new node[n + 1];
         }
 
         public void insert(node x) {
-            size++;
-            heap[size] = x;
-            int top = size;
+            heap[top] = x;
+            top++;
             while (top > 1) {
                 if (heap[top].value > heap[top / 2].value) {
                     swap(heap, top, top / 2);
@@ -89,10 +88,8 @@ public class C {
 
         public node delete() {
             node q = heap[1];
-            heap[1] = heap[size];
-            heap[size] = null;
-            size--;
-            int top = size;
+            heap[1] = heap[top - 1];
+            top--;
             int t = 1;
             while (t * 2 < top - 1) {
                 if (t * 2 + 1 == top - 1) {

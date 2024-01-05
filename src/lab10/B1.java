@@ -15,8 +15,8 @@ public class B1 {
             nodes[i].index = i;
         }
         int m = in.nextInt();
-        node a = new node();
         long result = 0;
+        node a = new node();
         long miniWeight = Long.MAX_VALUE;
         for (int i = 0; i < m; i++) {
             int p = in.nextInt();

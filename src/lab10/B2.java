@@ -36,7 +36,7 @@ public class B2 {
             if (min.node.isVisited) {
                 continue;
             }
-            if (min.value > 0) result -= min.value;
+//            if (min.value > 0) result -= min.value;
             min.node.isVisited = true;
             int child = min.node.children.size();
             for (int i = 0; i < child; i++) {
@@ -47,6 +47,11 @@ public class B2 {
                     }
                     heap.insert(new heapNode(temp, temp.value));
                 }
+            }
+        }
+        for (int i = 1; i <= n; i++) {
+            if (nodes[i].value > 0 && nodes[i].isVisited) {
+                result -= nodes[i].value;
             }
         }
         out.print(result);
@@ -130,6 +135,12 @@ public class B2 {
                 }
             }
             return q;
+        }
+
+        public void find(heapNode e){
+            for (int i = 1; i < heap.length; i++) {
+
+            }
         }
 
         public static void swap(heapNode[] heap, int i, int j) {
