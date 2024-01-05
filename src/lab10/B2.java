@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class A {
+public class B2 {
     public static void main(String[] args) {
+        long result = 0;
         QReader in = new QReader();
         QWriter out = new QWriter();
         int n = in.nextInt();
@@ -18,8 +19,13 @@ public class A {
             int a = in.nextInt();
             int b = in.nextInt();
             long c = in.nextLong();
+            if (c > 0) {
+                result += c;
+            }
             nodes[a].children.add(nodes[b]);
+            nodes[b].children.add(nodes[a]);
             nodes[a].LengthList.add(c);
+            nodes[b].LengthList.add(c);
         }
         heap heap = new heap(n);
         nodes[1].value = 0;
@@ -30,21 +36,20 @@ public class A {
             if (min.node.isVisited) {
                 continue;
             }
+            if (min.value > 0) result -= min.value;
             min.node.isVisited = true;
             int child = min.node.children.size();
             for (int i = 0; i < child; i++) {
                 Node temp = min.node.children.get(i);
                 if (!temp.isVisited) {
-                    if (temp.value > min.node.LengthList.get(i) + min.value) {
-                        temp.value = min.node.LengthList.get(i) + min.value;
+                    if (temp.value > min.node.LengthList.get(i)) {
+                        temp.value = min.node.LengthList.get(i);
                     }
                     heap.insert(new heapNode(temp, temp.value));
                 }
             }
         }
-        if (nodes[n].value == Long.MAX_VALUE) {
-            System.out.println("-1");
-        } else System.out.println(nodes[n].value);
+        out.print(result);
         out.close();
     }
 

@@ -45,7 +45,6 @@ public class BonusG {
             cur = cur.next;
         }
         out.print(cur.val);
-
         out.close();
     }
 
