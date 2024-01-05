@@ -11,45 +11,38 @@ public class BonusG {
         int x = in.nextInt();
         node[][] arr = new node[n][m];
         for (int i = 0; i < arr.length; i++) {
-            node head= new node(-1);
+            node head = new node(-1);
             for (int j = 0; j < arr[0].length; j++) {
-                arr[i][j] = new node(i*m+j);
-                head.next=arr[i][j];
-                arr[i][j].pre=head;
-                head=head.next;
+                arr[i][j] = new node(i * m + j);
+                head.next = arr[i][j];
+                arr[i][j].pre = head;
+                head = head.next;
             }
-            node tail=new node(-1);
-            tail.pre=head;
-            head.next=tail;
+            node tail = new node(-1);
+            tail.pre = head;
+            head.next = tail;
         }
-//        for (int i = 0; i < arr.length; i++) {
-//            for (int j = 0; j < arr[0].length; j++) {
-//                out.print(arr[i][j].val+" ");
-//            }
-//        }
-//        out.println("");
         for (int i = 0; i < k; i++) {
-            int p=in.nextInt();
-            int q=in.nextInt();
-            int pi=p/m;
-            int pj=p%m;
-            int qi=q/m;
-            int qj=q%m;
-            arr[pi][pj].next.pre=arr[qi][qj].pre;
-            arr[qi][qj].pre.next=arr[pi][pj].next;
-            arr[pi][pj].next=arr[qi][qj];
-            arr[qi][qj].pre=arr[pi][pj];
-//            out.println(pi+" "+pj+" "+qi+" "+qj);
+            int p = in.nextInt();
+            int q = in.nextInt();
+            int pi = p / m;
+            int pj = p % m;
+            int qi = q / m;
+            int qj = q % m;
+            arr[pi][pj].next.pre = arr[qi][qj].pre;
+            arr[qi][qj].pre.next = arr[pi][pj].next;
+            arr[pi][pj].next = arr[qi][qj];
+            arr[qi][qj].pre = arr[pi][pj];
         }
-        int xi=x/m;
-        int xj=x%m;
-        node cur=arr[xi][xj];
-        while (cur.pre.val!=-1){
-            cur=cur.pre;
+        int xi = x / m;
+        int xj = x % m;
+        node cur = arr[xi][xj];
+        while (cur.pre.val != -1) {
+            cur = cur.pre;
         }
-        while (cur.next.val!=-1) {
-            out.print(cur.val+" ");
-            cur=cur.next;
+        while (cur.next.val != -1) {
+            out.print(cur.val + " ");
+            cur = cur.next;
         }
         out.print(cur.val);
 

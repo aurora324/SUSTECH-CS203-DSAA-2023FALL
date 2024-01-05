@@ -43,6 +43,7 @@ public class BonusE {
             else news.append(s.charAt(i));
         }
         out.println(news);
+
         node node = buildTree(String.valueOf(news),0);
         out.close();
     }
@@ -75,7 +76,7 @@ public class BonusE {
         public node() {
         }
 
-        public node(char s) {
+        public node(char c) {
             this.c = c;
         }
 

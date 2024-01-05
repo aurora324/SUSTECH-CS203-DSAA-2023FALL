@@ -12,6 +12,7 @@ public class B1 {
         node[] nodes = new node[n + 1];
         for (int i = 1; i < nodes.length; i++) {
             nodes[i] = new node();
+            nodes[i].index = i;
         }
         int m = in.nextInt();
         node a = new node();
@@ -32,6 +33,8 @@ public class B1 {
         }
 
         heap heap = new heap(50_0000);
+        a.state = 2;
+        a.value = 0;
         for (int i = 0; i < a.children.size(); i++) {
             heapNode heapNode = new heapNode(a.children.get(i), a.weight.get(i));
             heap.insert(heapNode);
@@ -50,14 +53,14 @@ public class B1 {
                     heapNode.node.children.get(i).value = heapNode.node.weight.get(i);
                     heap.insert(new heapNode(heapNode.node.children.get(i), heapNode.node.weight.get(i)));
                 } else if (heapNode.node.children.get(i).state == 1) {
-                    if (heapNode.node.weight.get(i) < heapNode.value) {
+                    if (heapNode.node.weight.get(i) < heapNode.node.children.get(i).value) {
                         heap.insert(new heapNode(heapNode.node.children.get(i), heapNode.node.weight.get(i)));
                     }
                 }
             }
         }
         for (int i = 1; i < nodes.length; i++) {
-            if (nodes[i].state == 2 && nodes[i].value > 0) result += nodes[i].value;
+            if (nodes[i].state != 2 && nodes[i].value > 0) result += nodes[i].value;
         }
         out.print(result);
 
@@ -129,6 +132,7 @@ public class B1 {
     }
 
     public static class node {
+        int index;
         long value = Long.MAX_VALUE;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<Long> weight = new ArrayList<>();

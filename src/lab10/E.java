@@ -104,9 +104,7 @@ public class E {
             this.val = val;
             this.index = index;
         }
-
     }
-
     static class QReader {
         private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         private StringTokenizer tokenizer = new StringTokenizer("");
