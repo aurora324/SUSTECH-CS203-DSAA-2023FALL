@@ -22,10 +22,8 @@ public class F {
             int a = in.nextInt();
             int b = in.nextInt();
             nodes[a].children.add(nodes[b]);
-            nodes[b].children.add(nodes[a]);
             Long c = in.nextLong();
             nodes[a].LengthList.add(c);
-            nodes[b].LengthList.add(c);
         }
 
         for (int i = 0; i < p; i++) {
@@ -33,7 +31,7 @@ public class F {
             int b = in.nextInt();
 
             nodes[a].portal.add(nodes[b]);
-            nodes[b].portal.add(nodes[a]);
+            nodes[a].portalLengthList.add(0L);
 
         }
 
@@ -42,8 +40,8 @@ public class F {
 
         node[] heap = new node[n + 1];
         int top = 1;
-        nodes[1].val = 0;
-        insert(heap, top, nodes[1]);
+        start.val = 0;
+        insert(heap, top, start);
         top++;
         node min;
         while (top != 1) {
@@ -53,8 +51,8 @@ public class F {
             for (int i = 0; i < min.children.size(); i++) {
                 node temp = min.children.get(i);
                 if (!temp.isVisited) {
-                    if (temp.val > min.LengthList.get(i)) {
-                        temp.val = min.LengthList.get(i);
+                    if (temp.val > min.LengthList.get(i) + min.val) {
+                        temp.val = min.LengthList.get(i) + min.val;
                         int index = temp.heapIndex;
                         if (index == 0) {
                             insert(heap, top, temp);
@@ -65,9 +63,30 @@ public class F {
                     }
                 }
             }
+
+
+            if (min.total < k) {
+                for (int i = 0; i < min.portal.size(); i++) {
+                    node temp = min.portal.get(i);
+                    if (!temp.isVisited) {
+                        if (temp.val > min.portalLengthList.get(i) + min.val) {
+                            temp.val = min.portalLengthList.get(i) + min.val;
+                            int index = temp.heapIndex;
+                            if (index == 0) {
+                                insert(heap, top, temp);
+                                top++;
+                                temp.total++;
+                            } else {
+                                up(heap, temp);
+                                temp.total++;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-
+        out.print(end.val);
         out.close();
     }
 
@@ -169,13 +188,11 @@ public class F {
         int total;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<Long> LengthList = new ArrayList<>();
+        ArrayList<Long> portalLengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
 
         public node() {
-        }
-
-        public node(long val) {
-            this.val = val;
+            this.val = Long.MAX_VALUE;
         }
     }
 
