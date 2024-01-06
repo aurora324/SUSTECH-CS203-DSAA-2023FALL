@@ -23,6 +23,9 @@ public class F {
             int b = in.nextInt();
             nodes[a].children.add(nodes[b]);
             nodes[b].children.add(nodes[a]);
+            Long c = in.nextLong();
+            nodes[a].LengthList.add(c);
+            nodes[b].LengthList.add(c);
         }
 
         for (int i = 0; i < p; i++) {
@@ -31,13 +34,38 @@ public class F {
 
             nodes[a].portal.add(nodes[b]);
             nodes[b].portal.add(nodes[a]);
+
         }
 
         node start = nodes[in.nextInt()];
         node end = nodes[in.nextInt()];
 
-
-
+        node[] heap = new node[n + 1];
+        int top = 1;
+        nodes[1].val = 0;
+        insert(heap, top, nodes[1]);
+        top++;
+        node min;
+        while (top != 1) {
+            min = delete(heap, top);
+            top--;
+            min.isVisited = true;
+            for (int i = 0; i < min.children.size(); i++) {
+                node temp = min.children.get(i);
+                if (!temp.isVisited) {
+                    if (temp.val > min.LengthList.get(i)) {
+                        temp.val = min.LengthList.get(i);
+                        int index = temp.heapIndex;
+                        if (index == 0) {
+                            insert(heap, top, temp);
+                            top++;
+                        } else {
+                            up(heap, temp);
+                        }
+                    }
+                }
+            }
+        }
 
 
         out.close();
@@ -140,6 +168,7 @@ public class F {
         boolean isVisited;
         int total;
         ArrayList<node> children = new ArrayList<>();
+        ArrayList<Long> LengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
 
         public node() {
