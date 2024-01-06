@@ -4,82 +4,49 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class C1StandardMaxHeap {
+public class F {
     public static void main(String[] args) {
-        long result = 0;
         QReader in = new QReader();
         QWriter out = new QWriter();
         int n = in.nextInt();
         int m = in.nextInt();
-        node[][] nodes = new node[n][m];
-        long[][] values = new long[n][m];
-        for (int i = 0; i < nodes.length; i++) {
-            for (int j = 0; j < nodes[0].length; j++) {
-                nodes[i][j] = new node();
-            }
-        }
-        for (int i = 0; i < values.length; i++) {
-            for (int j = 0; j < values[0].length; j++) {
-                values[i][j] = in.nextLong();
-            }
+        int p = in.nextInt();
+        int k = in.nextInt();
+
+        node[] nodes = new node[n + 1];
+        for (int i = 1; i < nodes.length; i++) {
+            nodes[i] = new node();
         }
 
-        for (int i = 0; i < nodes.length - 1; i++) {
-            for (int j = 0; j < nodes[0].length; j++) {
-                nodes[i][j].children.add(nodes[i + 1][j]);
-                nodes[i + 1][j].children.add(nodes[i][j]);
-                nodes[i][j].LengthList.add(values[i][j] * values[i + 1][j]);
-                nodes[i + 1][j].LengthList.add(values[i][j] * values[i + 1][j]);
-            }
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            nodes[a].children.add(nodes[b]);
+            nodes[b].children.add(nodes[a]);
         }
 
+        for (int i = 0; i < p; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
 
-        for (int i = 0; i < nodes.length; i++) {
-            for (int j = 0; j < nodes[0].length - 1; j++) {
-                nodes[i][j].children.add(nodes[i][j + 1]);
-                nodes[i][j + 1].children.add(nodes[i][j]);
-                nodes[i][j].LengthList.add(values[i][j] * values[i][j + 1]);
-                nodes[i][j + 1].LengthList.add(values[i][j + 1] * values[i][j]);
-            }
+            nodes[a].portal.add(nodes[b]);
+            nodes[b].portal.add(nodes[a]);
         }
 
-        node[] heap = new node[n * m + 1];
-        int top = 1;
-        nodes[0][0].val = 0;
-        insert(heap, top, nodes[0][0]);
-        top++;
-        node min;
-        while (top != 1) {
-            min = delete(heap, top);
-            top--;
-//            out.println(min.val);
-            result += min.val;
-            min.isVisited = true;
-            for (int i = 0; i < min.children.size(); i++) {
-                node temp = min.children.get(i);
-                if (!temp.isVisited) {
-                    if (temp.val < min.LengthList.get(i)) {
-                        temp.val = min.LengthList.get(i);
-                        int index = temp.heapIndex;
-                        if (index == 0) {
-                            insert(heap, top, temp);
-                            top++;
-                        } else {
-                            up(heap, temp);
-                        }
-                    }
-                }
-            }
-        }
-        out.print(result);
+        node start = nodes[in.nextInt()];
+        node end = nodes[in.nextInt()];
+
+
+
+
+
         out.close();
     }
-
 
     public static void up(node[] heap, node node) {
         int index = node.heapIndex;
         while (index > 1) {
-            if (heap[index].val > heap[index / 2].val) {
+            if (heap[index].val < heap[index / 2].val) {
                 swap(heap, index, index / 2);
                 index /= 2;
             } else {
@@ -92,7 +59,10 @@ public class C1StandardMaxHeap {
         heap[top] = num;
         num.heapIndex = top;
         while (top > 1) {
-            if (heap[top].val > heap[top / 2].val) {
+            if (heap[top].val < heap[top / 2].val) {
+                swap(heap, top, top / 2);
+                top = top / 2;
+            } else if (heap[top].val == heap[top / 2].val) {
                 swap(heap, top, top / 2);
                 top = top / 2;
             } else {
@@ -115,19 +85,19 @@ public class C1StandardMaxHeap {
         int t = node.heapIndex;
         while (t * 2 < top) {
             if (t * 2 + 1 == top) {
-                if (heap[t * 2].val > heap[t].val) {
+                if (heap[t * 2].val <= heap[t].val) {
                     swap(heap, t, t * 2);
                     t *= 2;
                 } else {
                     return;
                 }
             } else {
-                if (heap[t].val >= heap[t * 2].val && heap[t].val >= heap[t * 2 + 1].val) {
+                if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
                     return;
-                } else if (heap[2 * t].val >= heap[t].val && heap[2 * t].val >= heap[2 * t + 1].val) {
+                } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
                     swap(heap, t, 2 * t);
                     t *= 2;
-                } else if (heap[2 * t + 1].val >= heap[t].val && heap[2 * t + 1].val >= heap[2 * t].val) {
+                } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
                     swap(heap, t, 2 * t + 1);
                     t = 2 * t + 1;
                 }
@@ -143,19 +113,19 @@ public class C1StandardMaxHeap {
         int t = 1;
         while (t * 2 < top - 1) {
             if (t * 2 + 1 == top - 1) {
-                if (heap[t * 2].val >= heap[t].val) {
+                if (heap[t * 2].val <= heap[t].val) {
                     swap(heap, t, t * 2);
                     t *= 2;
                 } else {
                     return re;
                 }
             } else {
-                if (heap[t].val >= heap[t * 2].val && heap[t].val >= heap[t * 2 + 1].val) {
+                if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
                     return re;
-                } else if (heap[2 * t].val >= heap[t].val && heap[2 * t].val >= heap[2 * t + 1].val) {
+                } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
                     swap(heap, t, 2 * t);
                     t *= 2;
-                } else if (heap[2 * t + 1].val >= heap[t].val && heap[2 * t + 1].val >= heap[2 * t].val) {
+                } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
                     swap(heap, t, 2 * t + 1);
                     t = 2 * t + 1;
                 }
@@ -164,18 +134,19 @@ public class C1StandardMaxHeap {
         return re;
     }
 
-    static class node {
-        long val;
-        boolean isVisited = false;
-        ArrayList<node> children;
-        ArrayList<Long> LengthList;
+    public static class node {
         int heapIndex;
-
+        long val;
+        boolean isVisited;
+        int total;
+        ArrayList<node> children = new ArrayList<>();
+        ArrayList<node> portal = new ArrayList<>();
 
         public node() {
-            this.val = Long.MIN_VALUE;
-            this.children = new ArrayList<>();
-            this.LengthList = new ArrayList<>();
+        }
+
+        public node(long val) {
+            this.val = val;
         }
     }
 
