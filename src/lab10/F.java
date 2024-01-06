@@ -75,11 +75,10 @@ public class F {
                             if (index == 0) {
                                 insert(heap, top, temp);
                                 top++;
-                                temp.total++;
                             } else {
                                 up(heap, temp);
-                                temp.total++;
                             }
+                            temp.total = min.total + 1;
                         }
                     }
                 }
