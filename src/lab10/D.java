@@ -2,7 +2,6 @@ package lab10;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class D {
@@ -42,7 +41,7 @@ public class D {
         int rear = 0;
 
         for (int i = 1; i <= k; i++) {
-            rear=0;
+            rear = 0;
             for (int j = 1; j < nodes.length; j++) {
                 nodes[j].isVisited = false;
                 nodes[j].total = 0;
@@ -52,12 +51,12 @@ public class D {
                 if (nodes[j].color == i) {
                     node root = nodes[j];
                     root.isVisited = true;
-                    queue[rear]=root;
+                    queue[rear] = root;
                     rear++;
                 }
             }
 
-            BFS(queue,front,rear);
+            BFS(queue, front, rear);
             for (int j = 1; j < nodes.length; j++) {
                 result[j][i] = nodes[j].total;
             }
@@ -81,7 +80,7 @@ public class D {
                 if (!queue[front].children.get(i).isVisited) {
                     queue[rear] = queue[front].children.get(i);
                     queue[rear].isVisited = true;
-                    queue[rear].total=queue[front].total+1;
+                    queue[rear].total = queue[front].total + 1;
                     rear++;
                 }
             }
