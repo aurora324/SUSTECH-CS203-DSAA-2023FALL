@@ -92,7 +92,7 @@ public class D {
         if (start >= end) {
             return;
         }
-        int mid = (start + end) / 2;
+        int mid = (start + end) >> 1;
         sort(arr, copy, start, mid);
         sort(arr, copy, mid + 1, end);
         merge(arr, copy, start, mid, end);
