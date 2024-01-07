@@ -29,14 +29,20 @@ public class D {
             nodes[q].children.add(nodes[p]);
         }
         int[][] result = new int[n + 1][k + 1];
-        ArrayList<node> arrayList = new ArrayList<>();
+        int[] copy = new int[k + 1];
+
         for (int p = 0; p < result.length; p++) {
             for (int q = 0; q < result[0].length; q++) {
                 result[p][q] = Integer.MAX_VALUE;
             }
         }
 
+        node[] queue = new node[50_0000];
+        int front = 0;
+        int rear = 0;
+
         for (int i = 1; i <= k; i++) {
+            rear=0;
             for (int j = 1; j < nodes.length; j++) {
                 nodes[j].isVisited = false;
                 nodes[j].total = 0;
@@ -46,38 +52,71 @@ public class D {
                 if (nodes[j].color == i) {
                     node root = nodes[j];
                     root.isVisited = true;
-                    arrayList.add(root);
+                    queue[rear]=root;
+                    rear++;
                 }
             }
 
-            BFS(arrayList);
-
+            BFS(queue,front,rear);
             for (int j = 1; j < nodes.length; j++) {
                 result[j][i] = nodes[j].total;
             }
         }
         for (int i = 1; i < result.length; i++) {
-            long answer=0;
-            for (int j = 1; j <=c; j++) {
-                answer+=result[i][j];
+            long answer = 0;
+            sort(result[i], copy, 1, k);
+            for (int j = 1; j <= c; j++) {
+                answer += result[i][j];
             }
-            out.print(answer+" ");
+            out.print(answer + " ");
         }
 
 
         out.close();
     }
 
-    public static void BFS(ArrayList<node> arrayList) {
-        while (!arrayList.isEmpty()) {
-            for (int i = 0; i < arrayList.get(0).children.size(); i++) {
-                if (!arrayList.get(0).children.get(i).isVisited) {
-                    arrayList.add(arrayList.get(0).children.get(i));
-                    arrayList.get(arrayList.size()-1).isVisited = true;
-                    arrayList.get(arrayList.size()-1).total = arrayList.get(0).total + 1;
+    public static void BFS(node[] queue, int front, int rear) {
+        while (rear - front != 0) {
+            for (int i = 0; i < queue[front].children.size(); i++) {
+                if (!queue[front].children.get(i).isVisited) {
+                    queue[rear] = queue[front].children.get(i);
+                    queue[rear].isVisited = true;
+                    queue[rear].total=queue[front].total+1;
+                    rear++;
                 }
             }
-            arrayList.remove(0);
+            front++;
+        }
+    }
+
+    public static void sort(int[] arr, int[] copy, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+        int mid = (start + end) / 2;
+        sort(arr, copy, start, mid);
+        sort(arr, copy, mid + 1, end);
+        merge(arr, copy, start, mid, end);
+    }
+
+    public static void merge(int[] arr, int[] copy, int start, int mid, int end) {
+        if (end + 1 - start >= 0) System.arraycopy(arr, start, copy, start, end + 1 - start);
+        int i = start;
+        int j = mid + 1;
+        for (int k = start; k <= end; k++) {
+            if (i > mid) {
+                arr[k] = copy[j];
+                j++;
+            } else if (j > end) {
+                arr[k] = copy[i];
+                i++;
+            } else if (copy[i] <= copy[j]) {
+                arr[k] = copy[i];
+                i++;
+            } else {
+                arr[k] = copy[j];
+                j++;
+            }
         }
     }
 
