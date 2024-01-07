@@ -64,7 +64,6 @@ public class F {
                 }
             }
 
-
             if (min.total < k) {
                 for (int i = 0; i < min.portal.size(); i++) {
                     node temp = min.portal.get(i);
