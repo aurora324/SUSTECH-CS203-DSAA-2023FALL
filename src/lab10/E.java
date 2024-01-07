@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
- 5 2 2
- 3 2
- 2 3
-
- 5 2 5
- 4 5
- 5 4
+ * 5 2 2
+ * 3 2
+ * 2 3
+ * <p>
+ * 5 2 5
+ * 4 5
+ * 5 4
  */
 public class E {
     public static void main(String[] args) {
@@ -49,7 +49,7 @@ public class E {
             }
         }
         //szai入读为0的点，入读为0 的点减一
-        int[]result=new int[cnt+1];
+        int[] result = new int[cnt + 1];
         for (int i = 1; i < nodes.length; i++) {
             for (int j = 0; j < nodes[i].children.size(); j++) {
                 if (nodes[i].color != nodes[i].children.get(j).color) {
@@ -57,11 +57,11 @@ public class E {
                 }
             }
         }
-        int counter=0;
+        int counter = 0;
         for (int i = 1; i < result.length; i++) {
-            if(result[i]==0)counter++;
+            if (result[i] == 0) counter++;
         }
-        if(result[nodes[S].color]==0)counter--;
+        if (result[nodes[S].color] == 0) counter--;
         out.print(counter);
         out.close();
     }
@@ -91,7 +91,6 @@ public class E {
         long val;
         int index;
         boolean isVisited;
-        int inDegree;
         int color;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<node> reChildren = new ArrayList<>();
@@ -105,6 +104,7 @@ public class E {
             this.index = index;
         }
     }
+
     static class QReader {
         private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         private StringTokenizer tokenizer = new StringTokenizer("");
