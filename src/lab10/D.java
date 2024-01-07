@@ -36,9 +36,9 @@ public class D {
             }
         }
 
-        node[] queue = new node[50_0000];
+        node[] queue = new node[10_0000];
         int front = 0;
-        int rear = 0;
+        int rear;
 
         for (int i = 1; i <= k; i++) {
             rear = 0;
