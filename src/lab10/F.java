@@ -15,9 +15,8 @@ public class F {
 
         node[] nodes = new node[n + 1];
         for (int i = 1; i < nodes.length; i++) {
-            nodes[i] = new node();
+            nodes[i] = new node(k);
         }
-
 
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
@@ -194,7 +193,7 @@ public class F {
         ArrayList<Long> portalLengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
 
-        public node() {
+        public node(int k) {
             this.val = Long.MAX_VALUE;
         }
     }
