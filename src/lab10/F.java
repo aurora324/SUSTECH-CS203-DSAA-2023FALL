@@ -18,6 +18,7 @@ public class F {
             nodes[i] = new node();
         }
 
+
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
@@ -48,21 +49,7 @@ public class F {
             min = delete(heap, top);
             top--;
             min.isVisited = true;
-            for (int i = 0; i < min.children.size(); i++) {
-                node temp = min.children.get(i);
-                if (!temp.isVisited) {
-                    if (temp.val > min.LengthList.get(i) + min.val) {
-                        temp.val = min.LengthList.get(i) + min.val;
-                        int index = temp.heapIndex;
-                        if (index == 0) {
-                            insert(heap, top, temp);
-                            top++;
-                        } else {
-                            up(heap, temp);
-                        }
-                    }
-                }
-            }
+
 
             if (min.total < k) {
                 for (int i = 0; i < min.portal.size(); i++) {
@@ -82,6 +69,24 @@ public class F {
                     }
                 }
             }
+
+            for (int i = 0; i < min.children.size(); i++) {
+                node temp = min.children.get(i);
+                if (!temp.isVisited) {
+                    if (temp.val > min.LengthList.get(i) + min.val) {
+                        temp.val = min.LengthList.get(i) + min.val;
+                        int index = temp.heapIndex;
+                        if (index == 0) {
+                            insert(heap, top, temp);
+                            top++;
+                        } else {
+                            up(heap, temp);
+                        }
+                    }
+                }
+            }
+
+
         }
 
         out.print(end.val);
