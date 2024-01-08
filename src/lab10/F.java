@@ -100,9 +100,9 @@ public class F {
         }
     }
 
-    public static void insert(node[] heap, int top, node num) {
-        heap[top] = num;
-        num.heapIndex = top;
+    public static void insert(node[] heap, int top, node node) {
+        heap[top] = node;
+        node.heapIndex = top;
         while (top > 1) {
             if (heap[top].val < heap[top / 2].val) {
                 swap(heap, top, top / 2);
