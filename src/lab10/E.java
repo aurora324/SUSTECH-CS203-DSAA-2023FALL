@@ -30,8 +30,6 @@ public class E {
             int q = in.nextInt();
             nodes[p].children.add(nodes[q]);
             nodes[q].reChildren.add(nodes[p]);
-//            nodes[p].inDegree++;
-//            nodes[q].inDegree++;
         }
         ArrayList<node> reverse = new ArrayList<>();
         for (int i = 1; i < nodes.length; i++) {
