@@ -15,7 +15,7 @@ public class F {
 
         node[] nodes = new node[n + 1];
         for (int i = 1; i < nodes.length; i++) {
-            nodes[i] = new node();
+            nodes[i] = new node(k);
             nodes[i].index = i;
         }
 
@@ -192,9 +192,10 @@ public class F {
         ArrayList<Long> portalLengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
 
-        heapNode[] state = new heapNode[11];
+        heapNode[] state;
 
-        public node() {
+        public node(int k) {
+            state = new heapNode[k + 1];
             for (int i = 0; i < state.length; i++) {
                 state[i] = new heapNode(this);
                 state[i].total = i;
