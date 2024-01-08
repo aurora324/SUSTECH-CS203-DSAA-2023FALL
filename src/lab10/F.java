@@ -16,6 +16,7 @@ public class F {
         node[] nodes = new node[n + 1];
         for (int i = 1; i < nodes.length; i++) {
             nodes[i] = new node();
+            nodes[i].index = i;
         }
 
         for (int i = 0; i < m; i++) {
@@ -38,23 +39,39 @@ public class F {
         node start = nodes[in.nextInt()];
         node end = nodes[in.nextInt()];
 
-        node[] heap = new node[n + 1];
+        heapNode[] heap = new heapNode[n * k + 1];
         int top = 1;
-        start.val = 0;
-        insert(heap, top, start);
+        start.state[0].val = 0;
+        insert(heap, top, start.state[0]);
         top++;
-        node min;
+        heapNode min;
         while (top != 1) {
             min = delete(heap, top);
             top--;
             min.isVisited = true;
 
+            for (int i = 0; i < min.father.children.size(); i++) {
+                heapNode temp = min.father.children.get(i).state[min.total];
+                if (!temp.isVisited) {
+                    if (temp.val > min.father.LengthList.get(i) + min.val) {
+                        temp.val = min.father.LengthList.get(i) + min.val;
+                        int index = temp.heapIndex;
+                        if (index == 0) {
+                            insert(heap, top, temp);
+                            top++;
+                        } else {
+                            up(heap, temp);
+                        }
+                    }
+                }
+            }
+
             if (min.total < k) {
-                for (int i = 0; i < min.portal.size(); i++) {
-                    node temp = min.portal.get(i);
+                for (int i = 0; i < min.father.portal.size(); i++) {
+                    heapNode temp = min.father.portal.get(i).state[min.total + 1];
                     if (!temp.isVisited) {
-                        if (temp.val > min.portalLengthList.get(i) + min.val) {
-                            temp.val = min.portalLengthList.get(i) + min.val;
+                        if (temp.val > min.father.portalLengthList.get(i) + min.val) {
+                            temp.val = min.father.portalLengthList.get(i) + min.val;
                             int index = temp.heapIndex;
                             if (index == 0) {
                                 insert(heap, top, temp);
@@ -67,31 +84,17 @@ public class F {
                     }
                 }
             }
-
-            for (int i = 0; i < min.children.size(); i++) {
-                node temp = min.children.get(i);
-                if (!temp.isVisited) {
-                    if (temp.val > min.LengthList.get(i) + min.val) {
-                        temp.val = min.LengthList.get(i) + min.val;
-                        int index = temp.heapIndex;
-                        if (index == 0) {
-                            insert(heap, top, temp);
-                            top++;
-                        } else {
-                            up(heap, temp);
-                        }
-                    }
-                }
-            }
-
-
         }
-
-        out.print(end.val);
+        for (int i = k; i >= 0; i--) {
+            if (end.state[i].val != Long.MAX_VALUE) {
+                out.print(end.state[i].val);
+                break;
+            }
+        }
         out.close();
     }
 
-    public static void up(node[] heap, node node) {
+    public static void up(heapNode[] heap, heapNode node) {
         int index = node.heapIndex;
         while (index > 1) {
             if (heap[index].val < heap[index / 2].val) {
@@ -103,7 +106,7 @@ public class F {
         }
     }
 
-    public static void insert(node[] heap, int top, node node) {
+    public static void insert(heapNode[] heap, int top, heapNode node) {
         heap[top] = node;
         node.heapIndex = top;
         while (top > 1) {
@@ -119,17 +122,17 @@ public class F {
         }
     }
 
-    public static void swap(node[] heap, int i, int j) {
+    public static void swap(heapNode[] heap, int i, int j) {
         int index = heap[i].heapIndex;
         heap[i].heapIndex = heap[j].heapIndex;
         heap[j].heapIndex = index;
 
-        node temp = heap[i];
+        heapNode temp = heap[i];
         heap[i] = heap[j];
         heap[j] = temp;
     }
 
-    public static void down(node[] heap, node node, int top) {
+    public static void down(heapNode[] heap, heapNode node, int top) {
         int t = node.heapIndex;
         while (t * 2 < top) {
             if (t * 2 + 1 == top) {
@@ -153,8 +156,8 @@ public class F {
         }
     }
 
-    public static node delete(node[] heap, int top) {
-        node re = heap[1];
+    public static heapNode delete(heapNode[] heap, int top) {
+        heapNode re = heap[1];
         heap[1] = heap[top - 1];
         heap[1].heapIndex = 1;
         heap[top - 1] = null;
@@ -183,10 +186,7 @@ public class F {
     }
 
     public static class node {
-        int heapIndex;
-        long val;
-        boolean isVisited;
-        int total;
+        int index;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<Long> LengthList = new ArrayList<>();
         ArrayList<Long> portalLengthList = new ArrayList<>();
@@ -195,18 +195,24 @@ public class F {
         heapNode[] state = new heapNode[11];
 
         public node() {
-            this.val = Long.MAX_VALUE;
             for (int i = 0; i < state.length; i++) {
-                state[i] = new heapNode();
+                state[i] = new heapNode(this);
+                state[i].total = i;
             }
         }
     }
 
     public static class heapNode {
+        int index;
         long val = Long.MAX_VALUE;
         int heapIndex;
+        boolean isVisited;
+        node father;
+        int total;
 
-        public heapNode() {
+        public heapNode(node father) {
+            this.father = father;
+            this.index = father.index;
         }
     }
 
