@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class F {
+public class main {
     public static void main(String[] args) {
         QReader in = new QReader();
         QWriter out = new QWriter();
@@ -18,11 +18,12 @@ public class F {
             nodes[i] = new node();
         }
 
+
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
-            Long c = in.nextLong();
             nodes[a].children.add(nodes[b]);
+            Long c = in.nextLong();
             nodes[a].LengthList.add(c);
         }
 
@@ -48,6 +49,7 @@ public class F {
             min = delete(heap, top);
             top--;
             min.isVisited = true;
+
 
             if (min.total < k) {
                 for (int i = 0; i < min.portal.size(); i++) {
@@ -192,21 +194,8 @@ public class F {
         ArrayList<Long> portalLengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
 
-        heapNode[] state = new heapNode[11];
-
         public node() {
             this.val = Long.MAX_VALUE;
-            for (int i = 0; i < state.length; i++) {
-                state[i] = new heapNode();
-            }
-        }
-    }
-
-    public static class heapNode {
-        long val = Long.MAX_VALUE;
-        int heapIndex;
-
-        public heapNode() {
         }
     }
 
