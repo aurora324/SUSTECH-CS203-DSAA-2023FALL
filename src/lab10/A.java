@@ -8,8 +8,8 @@ public class A {
     public static void main(String[] args) {
         QReader in = new QReader();
         QWriter out = new QWriter();
-        int n = in.nextInt();
-        int m = in.nextInt();
+        var n = in.nextInt();
+        var m = in.nextInt();
         node[] nodes = new node[n + 1];
         for (int i = 1; i < n + 1; i++) {
             nodes[i] = new node();
