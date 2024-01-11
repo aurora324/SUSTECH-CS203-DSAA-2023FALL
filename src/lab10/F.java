@@ -30,7 +30,6 @@ public class F {
         for (int i = 0; i < p; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
-
             nodes[a].portal.add(nodes[b]);
             nodes[a].portalLengthList.add(0L);
 
@@ -87,9 +86,7 @@ public class F {
         }
         long Min = Long.MAX_VALUE;
         for (int i = k; i >= 0; i--) {
-            if (end.state[i].val < Min) {
-                Min = end.state[i].val;
-            }
+            if (end.state[i].val < Min) Min = end.state[i].val;
         }
         out.print(Min);
         out.close();

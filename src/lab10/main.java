@@ -75,14 +75,13 @@ public class main {
             }
         }
 
-        Long[]arr=new Long[k+1];
-        Long []temp=new Long[k+1];
-        for (int i = 0; i < nodes[end].length; i++) {
-            arr[i]=nodes[end][i].val;
+        long Min = Long.MAX_VALUE;
+        for (int i = k; i >= 0; i--) {
+            if (nodes[end][i].val < Min) {
+                Min = nodes[end][i].val;
+            }
         }
-        sort(arr,temp,0,k);
-
-        System.out.print(arr[k]);
+        out.print(Min);
         out.close();
     }
 
