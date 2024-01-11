@@ -13,33 +13,41 @@ public class main {
         int p = in.nextInt();
         int k = in.nextInt();
 
-        node[] nodes = new node[n + 1];
+        node[][] nodes = new node[n + 1][k + 1];
         for (int i = 1; i < nodes.length; i++) {
-            nodes[i] = new node();
+            for (int j = 0; j < nodes[0].length; j++) {
+                nodes[i][j] = new node();
+                nodes[i][j].total = j;
+            }
         }
+
+
 
 
         for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            nodes[a].children.add(nodes[b]);
-            Long c = in.nextLong();
-            nodes[a].LengthList.add(c);
+            int x = in.nextInt();
+            int y = in.nextInt();
+            long z = in.nextLong();
+            for (int j = 0; j <= k; j++) {
+                nodes[x][k].children.add(nodes[y][k]);
+                nodes[x][k].LengthList.add(z);
+            }
         }
 
         for (int i = 0; i < p; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-
-            nodes[a].portal.add(nodes[b]);
-            nodes[a].portalLengthList.add(0L);
-
+            int x = in.nextInt();
+            int y = in.nextInt();
+            for (int j = 0; j < k; j++) {
+                nodes[x][j].children.add(nodes[y][j + 1]);
+                nodes[x][j].LengthList.add(0L);
+            }
         }
 
-        node start = nodes[in.nextInt()];
-        node end = nodes[in.nextInt()];
 
-        node[] heap = new node[n + 1];
+        node start = nodes[in.nextInt()][0];
+        int end = in.nextInt();
+
+        node[] heap = new node[n * (k + 1) + 1];
         int top = 1;
         start.val = 0;
         insert(heap, top, start);
@@ -49,26 +57,6 @@ public class main {
             min = delete(heap, top);
             top--;
             min.isVisited = true;
-
-
-            if (min.total < k) {
-                for (int i = 0; i < min.portal.size(); i++) {
-                    node temp = min.portal.get(i);
-                    if (!temp.isVisited) {
-                        if (temp.val > min.portalLengthList.get(i) + min.val) {
-                            temp.val = min.portalLengthList.get(i) + min.val;
-                            int index = temp.heapIndex;
-                            if (index == 0) {
-                                insert(heap, top, temp);
-                                top++;
-                            } else {
-                                up(heap, temp);
-                            }
-                            temp.total = min.total + 1;
-                        }
-                    }
-                }
-            }
 
             for (int i = 0; i < min.children.size(); i++) {
                 node temp = min.children.get(i);
@@ -85,11 +73,16 @@ public class main {
                     }
                 }
             }
-
-
         }
 
-        out.print(end.val);
+        Long[]arr=new Long[k+1];
+        Long []temp=new Long[k+1];
+        for (int i = 0; i < nodes[end].length; i++) {
+            arr[i]=nodes[end][i].val;
+        }
+        sort(arr,temp,0,k);
+
+        System.out.print(arr[k]);
         out.close();
     }
 
@@ -184,6 +177,37 @@ public class main {
         return re;
     }
 
+    public static void sort(Long[] arr, Long[] copy, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+        int mid = (start + end) / 2;
+        sort(arr, copy, start, mid);
+        sort(arr, copy, mid + 1, end);
+        merge(arr, copy, start, mid, end);
+    }
+
+    public static void merge(Long[] arr, Long[] copy, int start, int mid, int end) {
+        if (end + 1 - start >= 0) System.arraycopy(arr, start, copy, start, end + 1 - start);
+        int i = start;
+        int j = mid + 1;
+        for (int k = start; k <= end; k++) {
+            if (i > mid) {
+                arr[k] = copy[j];
+                j++;
+            } else if (j > end) {
+                arr[k] = copy[i];
+                i++;
+            } else if (copy[i] >= copy[j]) {
+                arr[k] = copy[i];
+                i++;
+            } else {
+                arr[k] = copy[j];
+                j++;
+            }
+        }
+    }
+
     public static class node {
         int heapIndex;
         long val;
@@ -191,8 +215,6 @@ public class main {
         int total;
         ArrayList<node> children = new ArrayList<>();
         ArrayList<Long> LengthList = new ArrayList<>();
-        ArrayList<Long> portalLengthList = new ArrayList<>();
-        ArrayList<node> portal = new ArrayList<>();
 
         public node() {
             this.val = Long.MAX_VALUE;

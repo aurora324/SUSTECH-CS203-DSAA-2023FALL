@@ -39,7 +39,7 @@ public class F {
         node start = nodes[in.nextInt()];
         node end = nodes[in.nextInt()];
 
-        heapNode[] heap = new heapNode[n * k + 1];
+        heapNode[] heap = new heapNode[n * (k + 1) + 1];
         int top = 1;
         start.state[0].val = 0;
         insert(heap, top, start.state[0]);
@@ -85,12 +85,13 @@ public class F {
                 }
             }
         }
+        long Min = Long.MAX_VALUE;
         for (int i = k; i >= 0; i--) {
-            if (end.state[i].val != Long.MAX_VALUE) {
-                out.print(end.state[i].val);
-                break;
+            if (end.state[i].val < Min) {
+                Min = end.state[i].val;
             }
         }
+        out.print(Min);
         out.close();
     }
 
@@ -191,7 +192,6 @@ public class F {
         ArrayList<Long> LengthList = new ArrayList<>();
         ArrayList<Long> portalLengthList = new ArrayList<>();
         ArrayList<node> portal = new ArrayList<>();
-
         heapNode[] state;
 
         public node(int k) {
@@ -216,6 +216,7 @@ public class F {
             this.index = father.index;
         }
     }
+
 
     static class QReader {
         private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
