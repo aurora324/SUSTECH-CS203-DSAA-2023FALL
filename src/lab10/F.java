@@ -64,11 +64,6 @@ public class F {
                     }
                 }
             }
-
-
-
-
-
             if (min.total < k) {
                 for (int i = 0; i < min.father.portal.size(); i++) {
                     heapNode temp = min.father.portal.get(i).state[min.total + 1];
