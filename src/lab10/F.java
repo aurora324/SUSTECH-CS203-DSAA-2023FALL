@@ -48,7 +48,6 @@ public class F {
             min = delete(heap, top);
             top--;
             min.isVisited = true;
-
             for (int i = 0; i < min.father.children.size(); i++) {
                 heapNode temp = min.father.children.get(i).state[min.total];
                 if (!temp.isVisited) {
@@ -84,7 +83,7 @@ public class F {
             }
         }
         long Min = Long.MAX_VALUE;
-        for (int i = k; i >= 0; i--) {
+        for (int i = 0; i < nodes.length; i++) {
             if (end.state[i].val < Min) Min = end.state[i].val;
         }
         out.print(Min);
