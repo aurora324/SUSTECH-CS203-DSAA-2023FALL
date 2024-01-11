@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class F {
+public class PassedF {
     public static void main(String[] args) {
         QReader in = new QReader();
         QWriter out = new QWriter();
@@ -30,6 +30,7 @@ public class F {
         for (int i = 0; i < p; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
+
             nodes[a].portal.add(nodes[b]);
             nodes[a].portalLengthList.add(0L);
 
@@ -38,13 +39,17 @@ public class F {
         node start = nodes[in.nextInt()];
         node end = nodes[in.nextInt()];
 
-        heap heap = new heap(n * (k + 1));
+        heapNode[] heap = new heapNode[n * (k + 1) + 1];
+        int top = 1;
         start.state[0].val = 0;
-        heap.insert(start.state[0]);
+        insert(heap, top, start.state[0]);
+        top++;
         heapNode min;
-        while (!heap.isEmpty()) {
-            min = heap.delete();
+        while (top != 1) {
+            min = delete(heap, top);
+            top--;
             min.isVisited = true;
+
             for (int i = 0; i < min.father.children.size(); i++) {
                 heapNode temp = min.father.children.get(i).state[min.total];
                 if (!temp.isVisited) {
@@ -52,13 +57,15 @@ public class F {
                         temp.val = min.father.LengthList.get(i) + min.val;
                         int index = temp.heapIndex;
                         if (index == 0) {
-                            heap.insert(temp);
+                            insert(heap, top, temp);
+                            top++;
                         } else {
-                            heap.up(temp);
+                            up(heap, temp);
                         }
                     }
                 }
             }
+
             if (min.total < k) {
                 for (int i = 0; i < min.father.portal.size(); i++) {
                     heapNode temp = min.father.portal.get(i).state[min.total + 1];
@@ -67,9 +74,10 @@ public class F {
                             temp.val = min.father.portalLengthList.get(i) + min.val;
                             int index = temp.heapIndex;
                             if (index == 0) {
-                                heap.insert(temp);
+                                insert(heap, top, temp);
+                                top++;
                             } else {
-                                heap.up(temp);
+                                up(heap, temp);
                             }
                             temp.total = min.total + 1;
                         }
@@ -78,119 +86,105 @@ public class F {
             }
         }
         long Min = Long.MAX_VALUE;
-        for (int i = 0; i <= k; i++) {
-            if (end.state[i].val < Min) Min = end.state[i].val;
+        for (int i = k; i >= 0; i--) {
+            if (end.state[i].val < Min) {
+                Min = end.state[i].val;
+            }
         }
         out.print(Min);
         out.close();
     }
 
-    public static class heap {
-        int top = 1;
-        heapNode[] heap;
-
-        public heap(int n) {
-            heap = new heapNode[n + 1];
-        }
-
-        public void up(heapNode node) {
-            int index = node.heapIndex;
-            while (index > 1) {
-                if (heap[index].val < heap[index / 2].val) {
-                    swap(index, index / 2);
-                    index /= 2;
-                } else {
-                    break;
-                }
+    public static void up(heapNode[] heap, heapNode node) {
+        int index = node.heapIndex;
+        while (index > 1) {
+            if (heap[index].val < heap[index / 2].val) {
+                swap(heap, index, index / 2);
+                index /= 2;
+            } else {
+                break;
             }
-        }
-
-        public void insert(heapNode node) {
-            heap[top] = node;
-            node.heapIndex = top;
-            while (top > 1) {
-                if (heap[top].val < heap[top / 2].val) {
-                    swap(top, top / 2);
-                    top = top / 2;
-                } else if (heap[top].val == heap[top / 2].val) {
-                    swap(top, top / 2);
-                    top = top / 2;
-                } else {
-                    break;
-                }
-            }
-            top++;
-        }
-
-        public void swap(int i, int j) {
-            int index = heap[i].heapIndex;
-            heap[i].heapIndex = heap[j].heapIndex;
-            heap[j].heapIndex = index;
-
-            heapNode temp = heap[i];
-            heap[i] = heap[j];
-            heap[j] = temp;
-        }
-
-        public void down(heapNode node) {
-            int t = node.heapIndex;
-            while (t * 2 < top) {
-                if (t * 2 + 1 == top) {
-                    if (heap[t * 2].val <= heap[t].val) {
-                        swap(t, t * 2);
-                        t *= 2;
-                    } else {
-                        return;
-                    }
-                } else {
-                    if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
-                        return;
-                    } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
-                        swap(t, 2 * t);
-                        t *= 2;
-                    } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
-                        swap(t, 2 * t + 1);
-                        t = 2 * t + 1;
-                    }
-                }
-            }
-        }
-
-        public heapNode delete() {
-            heapNode re = heap[1];
-            heap[1] = heap[top - 1];
-            heap[1].heapIndex = 1;
-            heap[top - 1] = null;
-            int t = 1;
-            while (t * 2 < top - 1) {
-                if (t * 2 + 1 == top - 1) {
-                    if (heap[t * 2].val <= heap[t].val) {
-                        swap(t, t * 2);
-                        t *= 2;
-                    } else {
-                        return re;
-                    }
-                } else {
-                    if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
-                        return re;
-                    } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
-                        swap(t, 2 * t);
-                        t *= 2;
-                    } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
-                        swap(t, 2 * t + 1);
-                        t = 2 * t + 1;
-                    }
-                }
-            }
-            top--;
-            return re;
-        }
-
-        public boolean isEmpty() {
-            return top == 1;
         }
     }
 
+    public static void insert(heapNode[] heap, int top, heapNode node) {
+        heap[top] = node;
+        node.heapIndex = top;
+        while (top > 1) {
+            if (heap[top].val < heap[top / 2].val) {
+                swap(heap, top, top / 2);
+                top = top / 2;
+            } else if (heap[top].val == heap[top / 2].val) {
+                swap(heap, top, top / 2);
+                top = top / 2;
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static void swap(heapNode[] heap, int i, int j) {
+        int index = heap[i].heapIndex;
+        heap[i].heapIndex = heap[j].heapIndex;
+        heap[j].heapIndex = index;
+
+        heapNode temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    public static void down(heapNode[] heap, heapNode node, int top) {
+        int t = node.heapIndex;
+        while (t * 2 < top) {
+            if (t * 2 + 1 == top) {
+                if (heap[t * 2].val <= heap[t].val) {
+                    swap(heap, t, t * 2);
+                    t *= 2;
+                } else {
+                    return;
+                }
+            } else {
+                if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
+                    return;
+                } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
+                    swap(heap, t, 2 * t);
+                    t *= 2;
+                } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
+                    swap(heap, t, 2 * t + 1);
+                    t = 2 * t + 1;
+                }
+            }
+        }
+    }
+
+    public static heapNode delete(heapNode[] heap, int top) {
+        heapNode re = heap[1];
+        heap[1] = heap[top - 1];
+        heap[1].heapIndex = 1;
+        heap[top - 1] = null;
+        int t = 1;
+        while (t * 2 < top - 1) {
+            if (t * 2 + 1 == top - 1) {
+                if (heap[t * 2].val <= heap[t].val) {
+                    swap(heap, t, t * 2);
+                    t *= 2;
+                } else {
+                    return re;
+                }
+            } else {
+                if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
+                    return re;
+                } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
+                    swap(heap, t, 2 * t);
+                    t *= 2;
+                } else if (heap[2 * t + 1].val <= heap[t].val && heap[2 * t + 1].val <= heap[2 * t].val) {
+                    swap(heap, t, 2 * t + 1);
+                    t = 2 * t + 1;
+                }
+            }
+        }
+        return re;
+    }
 
     public static class node {
         int index;

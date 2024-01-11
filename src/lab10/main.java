@@ -84,7 +84,6 @@ public class main {
         out.print(Min);
         out.close();
     }
-
     public static void up(node[] heap, node node) {
         int index = node.heapIndex;
         while (index > 1) {
