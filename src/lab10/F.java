@@ -22,7 +22,7 @@ public class F {
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
-            Long c = in.nextLong();
+            long c = in.nextLong();
             nodes[a].children.add(nodes[b]);
             nodes[a].LengthList.add(c);
         }
@@ -32,7 +32,6 @@ public class F {
             int b = in.nextInt();
             nodes[a].portal.add(nodes[b]);
             nodes[a].portalLengthList.add(0L);
-
         }
 
         node start = nodes[in.nextInt()];
@@ -77,9 +76,12 @@ public class F {
                 }
             }
         }
+
         long Min = Long.MAX_VALUE;
-        for (int i = 0; i <= k; i++) {
-            if (end.state[i].val < Min) Min = end.state[i].val;
+        for (int i = k; i >= 0; i--) {
+            if (end.state[i].val < Min) {
+                Min = end.state[i].val;
+            }
         }
         out.print(Min);
         out.close();
@@ -140,7 +142,7 @@ public class F {
                         swap(t, t * 2);
                         t *= 2;
                     } else {
-                        return;
+                        break;
                     }
                 } else {
                     if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
@@ -156,6 +158,7 @@ public class F {
             }
         }
 
+
         public heapNode delete() {
             heapNode re = heap[1];
             heap[1] = heap[top - 1];
@@ -168,11 +171,11 @@ public class F {
                         swap(t, t * 2);
                         t *= 2;
                     } else {
-                        return re;
+                        break;
                     }
                 } else {
                     if (heap[t].val <= heap[t * 2].val && heap[t].val <= heap[t * 2 + 1].val) {
-                        return re;
+                        break;
                     } else if (heap[2 * t].val <= heap[t].val && heap[2 * t].val <= heap[2 * t + 1].val) {
                         swap(t, 2 * t);
                         t *= 2;
@@ -190,7 +193,6 @@ public class F {
             return top == 1;
         }
     }
-
 
     public static class node {
         int index;
