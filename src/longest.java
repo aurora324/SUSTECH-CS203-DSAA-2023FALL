@@ -5,6 +5,7 @@ public class longest {
     public static void main(String[] args) {
         QReader in = new QReader();
         QWriter out = new QWriter();
+        PrintWriter printWriter = new PrintWriter(System.out);
         int n = in.nextInt();
         int p = in.nextInt();
         int q = in.nextInt();
@@ -18,7 +19,7 @@ public class longest {
 
         long sum = 0L;
         int a = 0;
-         if (q == 0) {
+        if (q == 0) {
             for (int i = 0; i < arr[0].length; i++) {
                 sum += arr[1][i];
             }
@@ -31,31 +32,28 @@ public class longest {
 
             sort(arr, copy, 0, n - 1);
 
-             //confirm a
-             if (arr[2][n - 1] > 0) {
-                 a = n;
-             } else {
-                 for (int i = 0; i < arr[0].length; i++) {
-                     //fan MaxHi
-                     if (arr[2][i] <= 0) {
-                         a = i - 1;
-                     }
-                 }
-             }
+            //confirm a
+            if (arr[2][n - 1] > 0) {
+                a = n;
+            } else {
+                for (int i = 0; i < arr[0].length; i++) {
+                    //fan MaxHi
+                    if (arr[2][i] <= 0) {
+                        a = i - 1;
+                    }
+                }
+            }
 
-             //basic
-             for (int i = 0; i < arr[0].length; i++) {
-                 sum += arr[1][i];
-             }
+            //basic
+            for (int i = 0; i < arr[0].length; i++) {
+                sum += arr[1][i];
+            }
 
             if (p == 0) {
-                for (int i = 0; i < Math.min(a,q); i++) {
-                    sum+=arr[2][i];
+                for (int i = 0; i < Math.min(a, q); i++) {
+                    sum += arr[2][i];
                 }
             } else {
-
-
-
 
 
                 long advance = Integer.MIN_VALUE;
@@ -246,6 +244,14 @@ class QWriter implements Closeable {
     public void println(Object object) {
         try {
             writer.write(object.toString());
+            writer.write("\n");
+        } catch (IOException e) {
+            return;
+        }
+    }
+
+    public void println() {
+        try {
             writer.write("\n");
         } catch (IOException e) {
             return;
