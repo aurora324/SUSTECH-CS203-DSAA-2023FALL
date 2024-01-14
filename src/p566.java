@@ -103,6 +103,13 @@ public class p566 {
                 return;
             }
         }
+        public void println() {
+            try {
+                writer.write("\n");
+            } catch (IOException e) {
+                return;
+            }
+        }
 
         @Override
         public void close() {
