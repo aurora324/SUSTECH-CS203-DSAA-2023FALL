@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 class lNode {
     long value;
@@ -140,8 +139,8 @@ public class NONONO {
 
     static class Reader {
         final private int BUFFER_SIZE = 1 << 16;
-        private DataInputStream din;
-        private byte[] buffer;
+        private final DataInputStream din;
+        private final byte[] buffer;
         private int bufferPointer, bytesRead;
         public Reader() {
             din = new DataInputStream(System.in);
@@ -234,8 +233,6 @@ public class NONONO {
         }
 
         public void close() throws IOException {
-            if (din == null)
-                return;
             din.close();
         }
     }
