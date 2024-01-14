@@ -4,8 +4,7 @@ import java.util.StringTokenizer;
 public class longest {
     public static void main(String[] args) {
         QReader in = new QReader();
-        QWriter out = new QWriter();
-        PrintWriter printWriter = new PrintWriter(System.out);
+        PrintWriter out = new PrintWriter(System.out);
         int n = in.nextInt();
         int p = in.nextInt();
         int q = in.nextInt();
@@ -227,44 +226,6 @@ class QReader {
 
     public long nextLong() {
         return Long.parseLong(next());
-    }
-}
-
-class QWriter implements Closeable {
-    private BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
-
-    public void print(Object object) {
-        try {
-            writer.write(object.toString());
-        } catch (IOException e) {
-            return;
-        }
-    }
-
-    public void println(Object object) {
-        try {
-            writer.write(object.toString());
-            writer.write("\n");
-        } catch (IOException e) {
-            return;
-        }
-    }
-
-    public void println() {
-        try {
-            writer.write("\n");
-        } catch (IOException e) {
-            return;
-        }
-    }
-
-    @Override
-    public void close() {
-        try {
-            writer.close();
-        } catch (IOException e) {
-            return;
-        }
     }
 }
 

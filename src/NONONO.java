@@ -17,7 +17,7 @@ class lNode {
 public class NONONO {
     public static void main(String[] args) throws IOException {
         QReader in = new QReader();
-        QWriter out = new QWriter();
+        PrintWriter out = new PrintWriter(System.out);
         long max = 100010;
         int case_num = in.nextInt();
         for (int i = 0; i < case_num; i++) {
@@ -142,11 +142,13 @@ public class NONONO {
         private final DataInputStream din;
         private final byte[] buffer;
         private int bufferPointer, bytesRead;
+
         public Reader() {
             din = new DataInputStream(System.in);
             buffer = new byte[BUFFER_SIZE];
             bufferPointer = bytesRead = 0;
         }
+
         public Reader(String file_name) throws IOException {
             din = new DataInputStream(new FileInputStream(file_name));
             buffer = new byte[BUFFER_SIZE];
@@ -236,6 +238,4 @@ public class NONONO {
             din.close();
         }
     }
-
-
 }
