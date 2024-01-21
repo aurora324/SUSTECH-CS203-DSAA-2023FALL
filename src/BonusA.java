@@ -12,9 +12,7 @@ public class BonusA {
             long[] arr = new long[n + 1];
             for (int j = 0; j < arr.length - 1; j++) {
                 arr[j] = in.nextLong();
-//                sort[i]=arr[i];
             }
-//            sort(sort,temp,0,n-1);
             //how many in a row: mid
             //k row
             long p = 1;
@@ -28,7 +26,6 @@ public class BonusA {
                     q = mid;
                 }
             }
-//            System.out.println(p + "" + k);
             out.println(p * k);
         }
 
@@ -58,7 +55,7 @@ public class BonusA {
 
 
     static class QReader {
-        private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         private StringTokenizer tokenizer = new StringTokenizer("");
 
         private String innerNextLine() {
@@ -100,7 +97,7 @@ public class BonusA {
     }
 
     static class QWriter implements Closeable {
-        private BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        private final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
         public void print(Object object) {
             try {
