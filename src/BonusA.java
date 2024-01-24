@@ -28,7 +28,6 @@ public class BonusA {
             }
             out.println(p * k);
         }
-
         out.close();
     }
 
